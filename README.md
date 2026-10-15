@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chashi Vai
 
-## Getting Started
+Bengali homepage built with Next.js App Router, React, TypeScript, Tailwind CSS v4 and self-hosted Noto Sans Bengali.
 
-First, run the development server:
+## Local development
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Run `npm install` then `npm run dev`. Open http://localhost:3000.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+In VS Code, use **Shift+Alt+F** to format the current file. The workspace recommends the Prettier extension and formats files on save. You can also format all source files with `npm run format`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Checks
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run lint`
+- `npm run format:check`
+- `npm run build`
+- `npm audit --omit=dev`
 
-## Learn More
+## Current scope
 
-To learn more about Next.js, take a look at the following resources:
+Responsive homepage, product search/category filters, accessible native product dialog, YouTube channel links. No checkout, authentication, payment processing, database or customer data collection has been added.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Before launch
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Supply verified business phone, WhatsApp, address and delivery/payment policies.
+- Verify product names, packaging, descriptions and permissions with the owner.
+- Replace the AI-generated illustrative pond photograph with an authentic business photograph when available.
+- Search indexing is disabled in metadata until launch.
+- CSP permits inline scripts for the current static Next.js rendering. Add a per-request nonce policy if adding authentication/checkout; review payment provider origins and all server-side authorization and input validation at that stage.
+- Production dependency audit passed with zero reported vulnerabilities on 2026-10-15. Full audit reports five high development-tool findings in the eslint-config-next / fast-glob / micromatch / braces dependency chain. Latest braces was 3.0.3 with no patched registry release available at setup; do not force-downgrade Next.js to silence this. Review updates before launch.
 
-## Deploy on Vercel
+## Assets
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Product images and logo supplied by the owner. Pond image AI-generated for this prototype. Noto Sans Bengali uses SIL OFL; license is in public/fonts/OFL.txt.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Expansion
+
+Extract the product data from src/app/page.tsx to a typed catalog module and connect a CMS/database when catalog pages are added. Commerce requires trusted server-side pricing, inventory validation, order storage, secure admin access and verified payment webhooks.
