@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 
 const channel = "https://www.youtube.com/@chashi-vai";
+const whatsapp = "https://wa.me/8801775087675";
+const facebook = "https://www.facebook.com/share/17Zu7y5ok3/";
 const products = [
   {
     id: "bactinil",
@@ -311,7 +313,7 @@ export default function Home() {
                 বুঝে সিদ্ধান্ত নিন।
               </h2>
               <p>
-                মাছ চাষ ও খামারের পণ্য নিয়ে চাষি ভাইয়ের ভিডিও দেখুন। কোনো পণ্য সম্পর্কে জানতে চাইলে
+                মাছ ও চিংড়ি চাষ, দৈনিক মাছের দাম এবং আধুনিক গবাদিপশু পালন নিয়ে চাষি ভাইয়ের ভিডিও দেখুন। কোনো পণ্য সম্পর্কে জানতে চাইলে
                 নামটি লিখে রাখুন, তারপর সরাসরি কথা বলুন।
               </p>
               <a
@@ -339,8 +341,8 @@ export default function Home() {
           </div>
           <div className="about-copy">
             <p>
-              চাষি ভাইয়ে মাছের খাবার, পোল্ট্রির খাবার ও খামার পরিচর্যার বিভিন্ন পণ্য সম্পর্কে জানতে
-              পারবেন। ইউটিউবে আমাদের দেখে এসেছেন? আপনার প্রয়োজনের পণ্য দিয়ে শুরু করুন।
+              আধুনিক কৃষির তথ্য সহজ বাংলায় পৌঁছে দেওয়াই চাষি ভাইয়ের লক্ষ্য। মাছ ও চিংড়ি চাষ, গবাদিপশু পালন এবং খামার পরিচর্যা নিয়ে জানতে
+              পারবেন আমাদের ইউটিউব চ্যানেলে। পাশাপাশি আপনার খামারের প্রয়োজনীয় পণ্য সম্পর্কে সরাসরি কথা বলতে পারেন।
             </p>
             <a className="text-link" href="#contact">
               চাষি ভাইয়ের সঙ্গে যোগাযোগ <span aria-hidden="true">→</span>
@@ -374,17 +376,22 @@ export default function Home() {
           <div>
             <p className="eyebrow">যোগাযোগ</p>
             <h2>প্রয়োজনের কথা জানান।</h2>
-            <p>এখন চাষি ভাইয়ের ইউটিউব চ্যানেলে যোগাযোগের প্রকাশিত তথ্য দেখুন।</p>
+            <p>পণ্যের নাম, প্রয়োজনীয় পরিমাণ ও আপনার এলাকা জানিয়ে WhatsApp করুন। দাম ও ডেলিভারি সম্পর্কে সরাসরি কথা বলুন।</p>
           </div>
           <a
             className="button primary"
-            href="https://www.youtube.com/@chashi-vai/about"
+            href={whatsapp}
             target="_blank"
             rel="noopener noreferrer"
           >
-            চ্যানেলের যোগাযোগের তথ্য <Arrow />
+            WhatsApp-এ কথা বলুন <Arrow />
           </a>
         </section>
+        <div className="container contact-details">
+          <a href="tel:+8801775087675"><small>ফোন ও WhatsApp</small><strong>01775-087675</strong><span>সরাসরি ফোন করুন ↗</span></a>
+          <a href="mailto:chashivai07@gmail.com"><small>ইমেইল</small><strong>chashivai07@gmail.com</strong><span>ইমেইল লিখুন ↗</span></a>
+          <a href={facebook} target="_blank" rel="noopener noreferrer"><small>সামাজিক যোগাযোগ</small><strong>Facebook-এ চাষি ভাই</strong><span>পেজ দেখুন ↗</span></a>
+        </div>
       </main>
       <footer>
         <div className="container footer-main">
@@ -444,8 +451,8 @@ export default function Home() {
                 দাম ও মজুত সম্পর্কে জানতে যোগাযোগ করুন। ব্যবহারবিধি ও প্রয়োগের মাত্রা আসল প্যাকেট
                 এবং প্রস্তুতকারকের নির্দেশনা থেকে নিশ্চিত করুন।
               </p>
-              <a className="button primary" href="#contact" onClick={() => dialog.current?.close()}>
-                যোগাযোগের তথ্য দেখুন <Arrow />
+              <a className="button primary" href={`${whatsapp}?text=${encodeURIComponent(`আসসালামু আলাইকুম, ${selected.name} (${selected.size}) পণ্যটির দাম, মজুত ও ডেলিভারি সম্পর্কে জানতে চাই।`)}`} target="_blank" rel="noopener noreferrer">
+                এই পণ্য নিয়ে WhatsApp করুন <Arrow />
               </a>
             </div>
           </div>
