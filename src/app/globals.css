@@ -201,7 +201,7 @@ img {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
   gap: 48px;
-  align-items: end;
+  align-items: center;
   min-height: calc(100svh - 140px);
 }
 
@@ -271,6 +271,11 @@ img {
   position: absolute;
   left: 0;
   top: 0;
+  opacity: 0;
+}
+
+.spin-word:first-child {
+  opacity: 1;
 }
 
 .actions {
@@ -388,6 +393,16 @@ img {
   gap: 28px;
   font-size: 14px;
   letter-spacing: 0.16em;
+  animation: rail 32s linear infinite;
+}
+
+@keyframes rail {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .rail-track span {
@@ -720,6 +735,19 @@ footer {
   display: grid;
   place-items: center;
   background: #07110d;
+  animation: intro-leave 0.45s ease 1.15s forwards;
+}
+
+.intro.is-skipped {
+  display: none;
+}
+
+@keyframes intro-leave {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 
 .intro-card {
@@ -912,6 +940,24 @@ footer {
   }
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .hero h1 .word,
+  .hero h1 em {
+    animation: word-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+}
+
+@keyframes word-rise {
+  from {
+    opacity: 0;
+    transform: translateY(80%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -919,16 +965,18 @@ footer {
 
   .intro,
   .pack-photo::after,
+  .spin-word + .spin-word,
+  .rail-track {
+    animation: none;
+  }
+
+  .intro,
   .spin-word + .spin-word {
     display: none;
   }
 
   .spin-word {
     position: static;
-  }
-
-  .word,
-  .hero-stage img {
-    animation: none !important;
+    opacity: 1;
   }
 }

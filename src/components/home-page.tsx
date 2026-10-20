@@ -4,12 +4,11 @@ import Image from "next/image";
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import gsap from "gsap";
 import { Flip } from "gsap/Flip";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { categories, featured, products, type CategoryId, type Product } from "@/data/catalog";
 import { channel, email, facebook, phone, phoneLabel, whatsapp, whatsappFor } from "@/data/site";
 
-gsap.registerPlugin(ScrollTrigger, Flip, useGSAP);
+gsap.registerPlugin(Flip, useGSAP);
 
 const phrases = ["মাছের পানি", "চিংড়ির ঘের", "পোল্ট্রির শক্তি"];
 const railItems = ["পানির যত্ন", "প্রোবায়োটিক", "অক্সিজেন", "ভিটামিন", "পুকুরের মাটি", "ভেট", "চাষি ভাই"];
@@ -116,54 +115,16 @@ export default function HomePage() {
   useGSAP(
     () => {
       if (reduced) return;
-      const intro = gsap.timeline();
-      intro
-        .from(".intro-crest", { scale: 0.86, autoAlpha: 0, duration: 0.55, ease: "power3.out" })
-        .from(".intro-line", { scaleX: 0, duration: 0.35 }, "-=0.15")
-        .to(".intro", { autoAlpha: 0, duration: 0.4, delay: 0.2 })
-        .set(".intro", { display: "none" });
-
-      gsap.from(".hero .word", {
-        yPercent: 110,
-        autoAlpha: 0,
-        duration: 0.8,
-        stagger: 0.05,
-        ease: "power3.out",
-        delay: 0.85,
-      });
-
       const spin = gsap.utils.toArray<HTMLElement>(".spin-word");
+      if (spin.length < 2) return;
       gsap.set(spin, { autoAlpha: 0, y: 14 });
-      if (spin[0]) gsap.set(spin[0], { autoAlpha: 1, y: 0 });
+      gsap.set(spin[0], { autoAlpha: 1, y: 0 });
       const cycle = gsap.timeline({ repeat: -1, delay: 1.2 });
       spin.forEach((word, index) => {
         cycle
           .to(word, { autoAlpha: 1, y: 0, duration: 0.4 }, index * 2.6)
           .to(word, { autoAlpha: 0, y: -14, duration: 0.35 }, index * 2.6 + 2);
       });
-
-      gsap.utils.toArray<HTMLElement>(".reveal").forEach((section) => {
-        gsap.from(section, {
-          y: 28,
-          autoAlpha: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: { trigger: section, start: "top 84%" },
-        });
-      });
-
-      const track = document.querySelector(".rail-track");
-      if (track) {
-        const loop = gsap.to(track, { xPercent: -50, duration: 28, ease: "none", repeat: -1 });
-        ScrollTrigger.create({
-          start: 0,
-          end: "max",
-          onUpdate: (self) => {
-            const speed = 1 + Math.min(Math.abs(self.getVelocity()) / 900, 3.5);
-            gsap.to(loop, { timeScale: speed, duration: 0.25, overwrite: "auto" });
-          },
-        });
-      }
     },
     { scope: root, dependencies: [reduced] },
   );
@@ -202,7 +163,11 @@ export default function HomePage() {
         মূল অংশে যান
       </a>
       <div className="intro" aria-hidden={reduced}>
-        <button className="intro-skip" type="button" onClick={() => gsap.set(".intro", { autoAlpha: 0, display: "none" })}>
+        <button
+          className="intro-skip"
+          type="button"
+          onClick={(event) => event.currentTarget.closest(".intro")?.classList.add("is-skipped")}
+        >
           এড়িয়ে যান
         </button>
         <div className="intro-card">
@@ -286,7 +251,17 @@ export default function HomePage() {
                   onClick={(event) => openProduct(feature, event.currentTarget.querySelector("img"))}
                   aria-label={`${feature.name} বিস্তারিত দেখুন`}
                 >
-                  <Image key={feature.id} src={feature.image} alt={feature.name} fill priority sizes="(max-width: 900px) 90vw, 42vw" />
+                  {featured.map((product, index) => (
+                    <Image
+                      key={product.id}
+                      src={product.image}
+                      alt={index === featureIndex ? product.name : ""}
+                      fill
+                      priority={index === 0}
+                      sizes="(max-width: 900px) 90vw, 42vw"
+                      style={{ opacity: index === featureIndex ? 1 : 0, transition: "opacity 0.45s ease" }}
+                    />
+                  ))}
                   <span className="stage-meta">
                     <span>
                       <span>{feature.nameBn}</span>
