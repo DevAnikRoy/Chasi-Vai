@@ -21,7 +21,7 @@ Responsive homepage, product search/category filters, accessible native product 
 
 ## Before launch
 
-- Supply verified business phone, WhatsApp, address and delivery/payment policies.
+- Phone, WhatsApp, email and Facebook were supplied from the channel description by the client. Supply the shop address and delivery/payment policies before launch. WhatsApp product inquiries include product name and pack size. Channel statistics are intentionally omitted because they change.
 - Verify product names, packaging, descriptions and permissions with the owner.
 - Replace the AI-generated illustrative pond photograph with an authentic business photograph when available.
 - Search indexing is disabled in metadata until launch.
