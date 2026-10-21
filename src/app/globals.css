@@ -191,6 +191,13 @@ img {
   padding: 8px 14px;
 }
 
+#products,
+#videos,
+#about,
+#contact {
+  scroll-margin-top: 96px;
+}
+
 .hero {
   position: relative;
   padding: 42px 0 18px;
@@ -209,6 +216,9 @@ img {
   margin: 0 0 14px;
   color: var(--gold);
   font-size: 13px;
+}
+
+.eyebrow[lang="en"] {
   letter-spacing: 0.14em;
 }
 
@@ -220,7 +230,6 @@ img {
 .channel h2 {
   margin: 0;
   font-weight: 750;
-  letter-spacing: -0.045em;
   line-height: 1.12;
 }
 
@@ -391,8 +400,7 @@ img {
   display: flex;
   width: max-content;
   gap: 28px;
-  font-size: 14px;
-  letter-spacing: 0.16em;
+  font-size: 15px;
   animation: rail 32s linear infinite;
 }
 
@@ -877,9 +885,12 @@ footer {
     gap: 28px;
   }
 
+  .hero-visual {
+    order: -1;
+  }
+
   .hero-stage {
     aspect-ratio: 1;
-    order: -1;
   }
 
   .search {
@@ -906,6 +917,7 @@ footer {
 
   .navigation.is-open {
     display: flex;
+    z-index: 40;
   }
 
   .dialog-photo {
@@ -976,7 +988,9 @@ footer {
   }
 
   .spin-word {
-    position: static;
-    opacity: 1;
+    position: static !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 }

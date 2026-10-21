@@ -114,7 +114,7 @@ export default function HomePage() {
 
   useGSAP(
     () => {
-      if (reduced) return;
+      if (reduced || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       const spin = gsap.utils.toArray<HTMLElement>(".spin-word");
       if (spin.length < 2) return;
       gsap.set(spin, { autoAlpha: 0, y: 14 });
@@ -215,7 +215,9 @@ export default function HomePage() {
         <section className="hero">
           <div className="container hero-grid">
             <div>
-              <p className="eyebrow">CHASHI VAI</p>
+              <p className="eyebrow" lang="en">
+                CHASHI VAI
+              </p>
               <h1>
                 <span className="line">
                   <Words text="খামারের যত্নে," />
@@ -244,7 +246,7 @@ export default function HomePage() {
               </div>
             </div>
             {feature && (
-              <div>
+              <div className="hero-visual">
                 <button
                   className="hero-stage"
                   type="button"
@@ -257,7 +259,7 @@ export default function HomePage() {
                       src={product.image}
                       alt={index === featureIndex ? product.name : ""}
                       fill
-                      priority={index === 0}
+                      priority
                       sizes="(max-width: 900px) 90vw, 42vw"
                       style={{ opacity: index === featureIndex ? 1 : 0, transition: "opacity 0.45s ease" }}
                     />
@@ -295,7 +297,9 @@ export default function HomePage() {
         <section className="band container" id="products">
           <div className="section-heading reveal">
             <div className="section-copy">
-              <p className="eyebrow">CATALOG</p>
+              <p className="eyebrow" lang="en">
+                CATALOG
+              </p>
               <h2>খামারের পণ্য, এক স্টেজে।</h2>
             </div>
             <label className="search">
@@ -371,7 +375,9 @@ export default function HomePage() {
               <span className="film-caption">চাষি ভাই / YouTube ↗</span>
             </a>
             <div className="section-copy">
-              <p className="eyebrow">WATCH</p>
+              <p className="eyebrow" lang="en">
+                WATCH
+              </p>
               <h2>ভিডিওতে দেখুন, বুঝে সিদ্ধান্ত নিন।</h2>
               <p>মাছ ও চিংড়ি চাষ, দৈনিক মাছের দাম এবং গবাদিপশু পালন নিয়ে চাষি ভাইয়ের চ্যানেল খুলুন।</p>
               <a className="button secondary" href={channel} target="_blank" rel="noopener noreferrer">
@@ -385,7 +391,9 @@ export default function HomePage() {
             <div className="about-brand">
               <Image src="/images/brand/crest.webp" alt="চাষি ভাইয়ের লোগো" width={112} height={112} />
               <div>
-                <p className="eyebrow">ABOUT</p>
+                <p className="eyebrow" lang="en">
+                  ABOUT
+                </p>
                 <h2>চেনা মানুষ, সহজ যোগাযোগ।</h2>
               </div>
             </div>
@@ -402,7 +410,9 @@ export default function HomePage() {
         </section>
         <section className="band container order">
           <div className="reveal">
-            <p className="eyebrow">PATH</p>
+            <p className="eyebrow" lang="en">
+              PATH
+            </p>
             <h2>পণ্য নিতে চাইলে, তিন ধাপ।</h2>
             <div className="steps">
               {[
@@ -422,7 +432,9 @@ export default function HomePage() {
         <section className="band container contact" id="contact">
           <div className="contact-grid reveal">
             <div>
-              <p className="eyebrow">CONTACT</p>
+              <p className="eyebrow" lang="en">
+                CONTACT
+              </p>
               <h2>প্রয়োজনের কথা জানান।</h2>
               <p>পণ্যের নাম, পরিমাণ আর এলাকা লিখে WhatsApp করুন।</p>
             </div>
