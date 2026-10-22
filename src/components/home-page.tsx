@@ -5,10 +5,11 @@ import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "re
 import gsap from "gsap";
 import { Flip } from "gsap/Flip";
 import { useGSAP } from "@gsap/react";
-import { ArrowRight, ArrowUpRight, BadgeCheck, Mail, Menu, MessageCircle, Package, Phone, Play, Search, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BadgeCheck, Mail, Menu, MessageCircle, Package, Phone, Search, X } from "lucide-react";
 import { categories, featured, products, type CategoryId, type Product } from "@/data/catalog";
 import { channel, email, facebook, phone, phoneLabel, whatsapp, whatsappFor } from "@/data/site";
 import { FacebookMark, WhatsAppMark, YouTubeMark } from "@/components/brand-marks";
+import ChannelPlayer from "@/components/channel-player";
 
 gsap.registerPlugin(Flip, useGSAP);
 
@@ -243,9 +244,9 @@ export default function HomePage() {
                   পণ্য দেখুন
                   <ArrowRight className="icon" size={18} strokeWidth={1.75} aria-hidden />
                 </MagnetLink>
-                <a className="button secondary" href={channel} target="_blank" rel="noopener noreferrer">
+                <a className="button secondary" href="#videos">
                   <YouTubeMark size={16} />
-                  ইউটিউব
+                  ভিডিও দেখুন
                 </a>
               </div>
             </div>
@@ -374,29 +375,20 @@ export default function HomePage() {
           </p>
         </section>
         <section className="band channel" id="videos">
-          <div className="container channel-grid reveal">
-            <a className="film" href={channel} target="_blank" rel="noopener noreferrer" aria-label="চাষি ভাই ইউটিউব চ্যানেল খুলুন">
-              <Image src="/images/pond.webp" alt="পুকুরপাড়ে জাল ফেলছেন একজন মাছচাষি" fill sizes="(max-width: 900px) 100vw, 50vw" />
-              <span className="play" aria-hidden="true">
-                <Play className="icon" size={26} fill="currentColor" strokeWidth={0} />
-              </span>
-              <span className="film-caption">
-                <YouTubeMark size={15} />
-                চাষি ভাই
-              </span>
-            </a>
+          <div className="container">
             <div className="section-copy">
               <p className="eyebrow" lang="en">
                 WATCH
               </p>
-              <h2>চাষের ভিডিও, এক চ্যানেলে।</h2>
-              <p>মাছ ও চিংড়ি চাষ, দৈনিক মাছের দাম এবং গবাদিপশু পালন — চাষি ভাইয়ের চ্যানেলে।</p>
-              <a className="button secondary" href={channel} target="_blank" rel="noopener noreferrer">
-                <YouTubeMark size={16} />
-                চ্যানেল খুলুন
-                <ArrowUpRight className="icon" size={16} strokeWidth={1.75} aria-hidden />
-              </a>
+              <h2>চাষের ভিডিও, এখানেই।</h2>
+              <p>মাছ ও চিংড়ি চাষের ভিডিও সাইটের ভিতরেই চলবে। অন্য ভিডিও বেছে নিলে সেটিও এখানেই শুরু হবে।</p>
             </div>
+            <ChannelPlayer reduced={reduced} />
+            <a className="text-link channel-out" href={channel} target="_blank" rel="noopener noreferrer">
+              <YouTubeMark size={16} />
+              পুরো চ্যানেল
+              <ArrowUpRight className="icon" size={16} strokeWidth={1.75} aria-hidden />
+            </a>
           </div>
         </section>
         <section className="band container about" id="about">
