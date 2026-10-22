@@ -5,8 +5,10 @@ import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "re
 import gsap from "gsap";
 import { Flip } from "gsap/Flip";
 import { useGSAP } from "@gsap/react";
+import { ArrowRight, ArrowUpRight, BadgeCheck, Mail, Menu, MessageCircle, Package, Phone, Play, Search, X } from "lucide-react";
 import { categories, featured, products, type CategoryId, type Product } from "@/data/catalog";
 import { channel, email, facebook, phone, phoneLabel, whatsapp, whatsappFor } from "@/data/site";
+import { FacebookMark, WhatsAppMark, YouTubeMark } from "@/components/brand-marks";
 
 gsap.registerPlugin(Flip, useGSAP);
 
@@ -180,7 +182,8 @@ export default function HomePage() {
         <div className="container">
           <span>মাছ ও পোল্ট্রি খামারের প্রয়োজনীয় পণ্য</span>
           <a href={channel} target="_blank" rel="noopener noreferrer">
-            চাষি ভাই ইউটিউব ↗
+            <YouTubeMark size={15} />
+            চাষি ভাই ইউটিউব
           </a>
         </div>
       </div>
@@ -199,6 +202,7 @@ export default function HomePage() {
             aria-controls="navigation"
             onClick={() => setMenu((open) => !open)}
           >
+            {menu ? <X className="icon" size={18} strokeWidth={1.75} aria-hidden /> : <Menu className="icon" size={18} strokeWidth={1.75} aria-hidden />}
             {menu ? "বন্ধ" : "মেনু"}
           </button>
           <nav id="navigation" className={menu ? "navigation is-open" : "navigation"} aria-label="প্রধান মেনু" onClick={closeMenu}>
@@ -206,7 +210,7 @@ export default function HomePage() {
             <a href="#videos">ভিডিও</a>
             <a href="#about">পরিচয়</a>
             <a className="nav-contact" href="#contact">
-              যোগাযোগ ↗
+              যোগাযোগ
             </a>
           </nav>
         </div>
@@ -226,9 +230,7 @@ export default function HomePage() {
                   <Words text="পাশে" /> <em>চাষি ভাই।</em>
                 </span>
               </h1>
-              <p className="lede">
-                মাছের পানি, চিংড়ির ঘের আর পোল্ট্রির শক্তি। পণ্য দেখুন, নাম মিলিয়ে নিন, তারপর সরাসরি কথা বলুন।
-              </p>
+              <p className="lede">পণ্যের নাম মিলিয়ে নিন। দাম ও মজুত জানতে সরাসরি কথা বলুন।</p>
               <div className="spin" aria-hidden="true">
                 {phrases.map((phrase) => (
                   <span className="spin-word" key={phrase}>
@@ -238,10 +240,12 @@ export default function HomePage() {
               </div>
               <div className="actions">
                 <MagnetLink className="button primary" href="#products">
-                  পণ্য দেখুন →
+                  পণ্য দেখুন
+                  <ArrowRight className="icon" size={18} strokeWidth={1.75} aria-hidden />
                 </MagnetLink>
                 <a className="button secondary" href={channel} target="_blank" rel="noopener noreferrer">
-                  ▷ ইউটিউব
+                  <YouTubeMark size={16} />
+                  ইউটিউব
                 </a>
               </div>
             </div>
@@ -300,10 +304,10 @@ export default function HomePage() {
               <p className="eyebrow" lang="en">
                 CATALOG
               </p>
-              <h2>খামারের পণ্য, এক স্টেজে।</h2>
+              <h2>প্যাক দেখে নিন।</h2>
             </div>
             <label className="search">
-              <span aria-hidden="true">⌕</span>
+              <Search className="icon" size={18} strokeWidth={1.75} aria-hidden />
               <input
                 type="search"
                 maxLength={100}
@@ -340,7 +344,8 @@ export default function HomePage() {
                 <h3 lang="en">{product.name}</h3>
                 <p className="bn">{product.nameBn}</p>
                 <button className="text-link" type="button" onClick={() => openProduct(product)}>
-                  বিস্তারিত দেখুন →
+                  বিস্তারিত দেখুন
+                  <ArrowRight className="icon" size={16} strokeWidth={1.75} aria-hidden />
                 </button>
               </article>
             ))}
@@ -362,7 +367,10 @@ export default function HomePage() {
           )}
           <p className="footnote">
             দাম, মজুত ও ডেলিভারি সরাসরি জানুন। ব্যবহারবিধি আসল প্যাকেট থেকে নিন।{" "}
-            <a href="#contact">যোগাযোগ →</a>
+            <a href="#contact">
+              যোগাযোগ
+              <ArrowRight className="icon" size={14} strokeWidth={1.75} aria-hidden />
+            </a>
           </p>
         </section>
         <section className="band channel" id="videos">
@@ -370,18 +378,23 @@ export default function HomePage() {
             <a className="film" href={channel} target="_blank" rel="noopener noreferrer" aria-label="চাষি ভাই ইউটিউব চ্যানেল খুলুন">
               <Image src="/images/pond.webp" alt="পুকুরপাড়ে জাল ফেলছেন একজন মাছচাষি" fill sizes="(max-width: 900px) 100vw, 50vw" />
               <span className="play" aria-hidden="true">
-                ▶
+                <Play className="icon" size={26} fill="currentColor" strokeWidth={0} />
               </span>
-              <span className="film-caption">চাষি ভাই / YouTube ↗</span>
+              <span className="film-caption">
+                <YouTubeMark size={15} />
+                চাষি ভাই
+              </span>
             </a>
             <div className="section-copy">
               <p className="eyebrow" lang="en">
                 WATCH
               </p>
-              <h2>ভিডিওতে দেখুন, বুঝে সিদ্ধান্ত নিন।</h2>
-              <p>মাছ ও চিংড়ি চাষ, দৈনিক মাছের দাম এবং গবাদিপশু পালন নিয়ে চাষি ভাইয়ের চ্যানেল খুলুন।</p>
+              <h2>চাষের ভিডিও, এক চ্যানেলে।</h2>
+              <p>মাছ ও চিংড়ি চাষ, দৈনিক মাছের দাম এবং গবাদিপশু পালন — চাষি ভাইয়ের চ্যানেলে।</p>
               <a className="button secondary" href={channel} target="_blank" rel="noopener noreferrer">
-                ইউটিউব চ্যানেলে যান ↗
+                <YouTubeMark size={16} />
+                চ্যানেল খুলুন
+                <ArrowUpRight className="icon" size={16} strokeWidth={1.75} aria-hidden />
               </a>
             </div>
           </div>
@@ -394,16 +407,16 @@ export default function HomePage() {
                 <p className="eyebrow" lang="en">
                   ABOUT
                 </p>
-                <h2>চেনা মানুষ, সহজ যোগাযোগ।</h2>
+                <h2>সরাসরি কথা বলার জায়গা।</h2>
               </div>
             </div>
             <div>
               <p>
-                আধুনিক কৃষির তথ্য সহজ বাংলায় পৌঁছে দেওয়াই চাষি ভাইয়ের লক্ষ্য। মাছ ও চিংড়ি চাষ, গবাদিপশু পালন এবং খামার পরিচর্যা নিয়ে জানতে
-                পারবেন ইউটিউব চ্যানেলে। পণ্য নিতে চাইলে সরাসরি কথা বলুন।
+                মাছ ও চিংড়ি চাষ, গবাদিপশু পালন এবং খামার পরিচর্যা নিয়ে ভিডিও আছে ইউটিউবে। পণ্য নিতে চাইলে এখান থেকেই কথা বলুন।
               </p>
               <a className="text-link" href="#contact">
-                যোগাযোগ করুন →
+                যোগাযোগ করুন
+                <ArrowRight className="icon" size={16} strokeWidth={1.75} aria-hidden />
               </a>
             </div>
           </div>
@@ -413,15 +426,18 @@ export default function HomePage() {
             <p className="eyebrow" lang="en">
               PATH
             </p>
-            <h2>পণ্য নিতে চাইলে, তিন ধাপ।</h2>
+            <h2>কথা বলার তিন ধাপ।</h2>
             <div className="steps">
               {[
-                ["০১", "পণ্য বেছে নিন", "নাম ও প্যাক সাইজ দেখে আপনার প্রয়োজনের পণ্যটি খুঁজুন।"],
-                ["০২", "বিস্তারিত জানুন", "দাম, মজুত ও ডেলিভারি নিয়ে সরাসরি কথা বলুন।"],
-                ["০৩", "অর্ডার নিশ্চিত করুন", "পেমেন্ট ও গ্রহণের নিয়ম জেনে তারপর অর্ডার দিন।"],
-              ].map(([number, title, copy]) => (
+                { number: "০১", title: "পণ্য বেছে নিন", copy: "নাম ও প্যাক সাইজ দেখে আপনার প্রয়োজনের পণ্যটি খুঁজুন।", icon: Package },
+                { number: "০২", title: "বিস্তারিত জানুন", copy: "দাম, মজুত ও ডেলিভারি নিয়ে সরাসরি কথা বলুন।", icon: MessageCircle },
+                { number: "০৩", title: "অর্ডার নিশ্চিত করুন", copy: "পেমেন্ট ও গ্রহণের নিয়ম জেনে তারপর অর্ডার দিন।", icon: BadgeCheck },
+              ].map(({ number, title, copy, icon: StepIcon }) => (
                 <article className="step" key={number}>
-                  <span className="step-number">{number}</span>
+                  <span className="step-number">
+                    <StepIcon className="icon" size={16} strokeWidth={1.75} aria-hidden />
+                    {number}
+                  </span>
                   <h3>{title}</h3>
                   <p>{copy}</p>
                 </article>
@@ -435,28 +451,47 @@ export default function HomePage() {
               <p className="eyebrow" lang="en">
                 CONTACT
               </p>
-              <h2>প্রয়োজনের কথা জানান।</h2>
+              <h2>সরাসরি যোগাযোগ।</h2>
               <p>পণ্যের নাম, পরিমাণ আর এলাকা লিখে WhatsApp করুন।</p>
             </div>
             <MagnetLink className="button primary" href={whatsapp} external>
-              WhatsApp-এ কথা বলুন ↗
+              <WhatsAppMark />
+              WhatsApp-এ কথা বলুন
             </MagnetLink>
           </div>
           <div className="contact-details">
             <a href={`tel:${phone}`}>
+              <span className="contact-icon">
+                <Phone className="icon" size={18} strokeWidth={1.75} aria-hidden />
+              </span>
               <small>ফোন ও WhatsApp</small>
               <strong>{phoneLabel}</strong>
-              <span>সরাসরি ফোন করুন ↗</span>
+              <span className="contact-action">
+                সরাসরি ফোন করুন
+                <ArrowUpRight className="icon" size={14} strokeWidth={1.75} aria-hidden />
+              </span>
             </a>
             <a href={`mailto:${email}`}>
+              <span className="contact-icon">
+                <Mail className="icon" size={18} strokeWidth={1.75} aria-hidden />
+              </span>
               <small>ইমেইল</small>
               <strong>{email}</strong>
-              <span>ইমেইল লিখুন ↗</span>
+              <span className="contact-action">
+                ইমেইল লিখুন
+                <ArrowUpRight className="icon" size={14} strokeWidth={1.75} aria-hidden />
+              </span>
             </a>
             <a href={facebook} target="_blank" rel="noopener noreferrer">
+              <span className="contact-icon">
+                <FacebookMark />
+              </span>
               <small>সামাজিক যোগাযোগ</small>
               <strong>Facebook-এ চাষি ভাই</strong>
-              <span>পেজ দেখুন ↗</span>
+              <span className="contact-action">
+                পেজ দেখুন
+                <ArrowUpRight className="icon" size={14} strokeWidth={1.75} aria-hidden />
+              </span>
             </a>
           </div>
         </section>
@@ -481,6 +516,7 @@ export default function HomePage() {
         </div>
       </footer>
       <MagnetLink className="button primary dock" href={whatsapp} external>
+        <WhatsAppMark />
         WhatsApp
       </MagnetLink>
       <dialog
@@ -495,7 +531,7 @@ export default function HomePage() {
         {selected && (
           <div className="dialog-content">
             <button className="dialog-close" type="button" aria-label="বিস্তারিত বন্ধ করুন" onClick={() => dialog.current?.close()}>
-              ×
+              <X className="icon" size={18} strokeWidth={1.75} aria-hidden />
             </button>
             <div className="dialog-photo">
               <Image src={selected.image} alt={selected.name} fill sizes="(max-width: 900px) 90vw, 420px" />
@@ -518,7 +554,8 @@ export default function HomePage() {
               </dl>
               <p>দাম ও মজুত জানতে যোগাযোগ করুন। প্রয়োগের মাত্রা আসল প্যাকেটের নির্দেশনা থেকে নিন।</p>
               <a className="button primary" href={whatsappFor(selected.name, selected.size)} target="_blank" rel="noopener noreferrer">
-                এই পণ্য নিয়ে WhatsApp ↗
+                <WhatsAppMark />
+                এই পণ্য নিয়ে WhatsApp
               </a>
             </div>
           </div>

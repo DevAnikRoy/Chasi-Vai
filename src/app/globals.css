@@ -115,7 +115,15 @@ img {
 }
 
 .topbar a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: var(--gold);
+}
+
+.icon {
+  display: block;
+  flex: none;
 }
 
 .header {
@@ -185,6 +193,8 @@ img {
 
 .menu-button {
   display: none;
+  align-items: center;
+  gap: 8px;
   background: transparent;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -366,7 +376,10 @@ img {
 .stage-meta span {
   color: var(--gold);
   font-size: 12px;
-  letter-spacing: 0.08em;
+}
+
+.stage-meta strong {
+  letter-spacing: 0.04em;
 }
 
 .stage-dots {
@@ -567,6 +580,9 @@ img {
 }
 
 .text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   width: fit-content;
   margin-top: 8px;
   padding: 0;
@@ -586,6 +602,9 @@ img {
 }
 
 .footnote a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   color: var(--gold);
 }
 
@@ -619,13 +638,19 @@ img {
   border-radius: 50%;
   background: var(--red);
   color: white;
-  font-size: 22px;
+}
+
+.play svg {
+  margin-left: 3px;
 }
 
 .film-caption {
   position: absolute;
   left: 16px;
   bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   padding: 8px 12px;
   border-radius: 999px;
   background: rgba(7, 17, 13, 0.72);
@@ -663,9 +688,12 @@ img {
 }
 
 .step-number {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   color: var(--gold);
   font-size: 13px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
 }
 
 .step h3 {
@@ -685,19 +713,30 @@ img {
 }
 
 .contact-details a {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   padding: 18px 0;
   border-top: 1px solid var(--line);
 }
 
-.contact-details small,
-.contact-details strong,
-.contact-details span {
-  display: block;
+.contact-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 14px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--gold);
 }
 
 .contact-details small,
-.contact-details span {
+.contact-details strong {
+  display: block;
+}
+
+.contact-details small {
   color: var(--muted);
   font-size: 13px;
 }
@@ -708,8 +747,13 @@ img {
   overflow-wrap: anywhere;
 }
 
-.contact-details span {
+.contact-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
   color: var(--gold);
+  font-size: 13px;
 }
 
 footer {
@@ -831,8 +875,11 @@ footer {
   top: 14px;
   right: 14px;
   z-index: 2;
+  display: grid;
+  place-items: center;
   width: 40px;
   height: 40px;
+  padding: 0;
   border: 0;
   border-radius: 50%;
   background: #07110d;
