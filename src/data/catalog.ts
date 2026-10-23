@@ -352,12 +352,21 @@ export const products: Product[] = [
   },
 ];
 
-export const featured = [
+function byId(ids: string[]) {
+  return ids
+    .map((id) => products.find((product) => product.id === id))
+    .filter((product): product is Product => Boolean(product));
+}
+
+export const featured = byId(["aquakleen", "protox-aqua", "oxylife-granular", "nrg-c-aqua", "ecopond"]);
+
+export const shelf = byId([
   "aquakleen",
-  "protox-aqua",
   "oxylife-granular",
-  "nrg-c-aqua",
   "ecopond",
-]
-  .map((id) => products.find((product) => product.id === id))
-  .filter((product): product is Product => Boolean(product));
+  "protox-aqua",
+  "soil-care",
+  "orulina",
+  "nrg-c-aqua",
+  "ciprocin-vet",
+]);

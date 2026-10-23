@@ -7,6 +7,7 @@ import { Flip } from "gsap/Flip";
 import { useGSAP } from "@gsap/react";
 import { ArrowRight, ArrowUpRight, BadgeCheck, Mail, Menu, MessageCircle, Package, Phone, Search, X } from "lucide-react";
 import { categories, featured, products, type CategoryId, type Product } from "@/data/catalog";
+import PackShelf from "@/components/pack-shelf";
 import { channel, email, facebook, phone, phoneLabel, whatsapp, whatsappFor } from "@/data/site";
 import { FacebookMark, WhatsAppMark, YouTubeMark } from "@/components/brand-marks";
 import ChannelPlayer from "@/components/channel-player";
@@ -14,7 +15,6 @@ import ChannelPlayer from "@/components/channel-player";
 gsap.registerPlugin(Flip, useGSAP);
 
 const phrases = ["মাছের পানি", "চিংড়ির ঘের", "পোল্ট্রির শক্তি"];
-const railItems = ["পানির যত্ন", "প্রোবায়োটিক", "অক্সিজেন", "ভিটামিন", "পুকুরের মাটি", "ভেট", "চাষি ভাই"];
 
 function useReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -292,13 +292,7 @@ export default function HomePage() {
             )}
           </div>
         </section>
-        <div className="rail" aria-hidden="true">
-          <div className="rail-track">
-            {[...railItems, ...railItems].map((item, index) => (
-              <span key={`${item}-${index}`}>{item}</span>
-            ))}
-          </div>
-        </div>
+        <PackShelf reduced={reduced} onOpen={openProduct} />
         <section className="band container" id="products">
           <div className="section-heading reveal">
             <div className="section-copy">
