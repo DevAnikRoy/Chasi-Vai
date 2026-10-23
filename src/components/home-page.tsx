@@ -6,7 +6,7 @@ import gsap from "gsap";
 import { Flip } from "gsap/Flip";
 import { useGSAP } from "@gsap/react";
 import { ArrowRight, ArrowUpRight, BadgeCheck, Mail, Menu, MessageCircle, Package, Phone, Search, X } from "lucide-react";
-import { categories, featured, products, type CategoryId, type Product } from "@/data/catalog";
+import { categories, products, type CategoryId, type Product } from "@/data/catalog";
 import PackShelf from "@/components/pack-shelf";
 import { channel, email, facebook, phone, phoneLabel, whatsapp, whatsappFor } from "@/data/site";
 import { FacebookMark, WhatsAppMark, YouTubeMark } from "@/components/brand-marks";
@@ -89,8 +89,6 @@ export default function HomePage() {
   const [filter, setFilter] = useState<CategoryId>("all");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Product | null>(null);
-  const [featureIndex, setFeatureIndex] = useState(0);
-  const feature = featured[featureIndex] ?? featured[0];
 
   const shown = products.filter((product) => {
     const categoryOk = filter === "all" || product.category === filter;
@@ -104,14 +102,6 @@ export default function HomePage() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    if (reduced) return;
-    const timer = window.setInterval(() => {
-      setFeatureIndex((index) => (index + 1) % featured.length);
-    }, 4200);
-    return () => window.clearInterval(timer);
-  }, [reduced]);
 
   useLayoutEffect(() => {
     const node = dialog.current;
@@ -199,6 +189,15 @@ export default function HomePage() {
       </header>
       <main id="main">
         <section className="hero">
+          <Image
+            className="hero-photo"
+            src="/images/hero-pond.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+          />
+          <div className="hero-shade" />
           <div className="container hero-grid">
             <div className="hero-copy">
               <p className="eyebrow">মাছ · চিংড়ি · পোল্ট্রি</p>
@@ -229,59 +228,6 @@ export default function HomePage() {
                 </a>
               </div>
             </div>
-            {feature && (
-              <div className="hero-visual">
-                <button
-                  className="hero-stage"
-                  type="button"
-                  onClick={(event) => {
-                    const images = event.currentTarget.querySelectorAll("img");
-                    openProduct(feature, images[featureIndex] ?? null);
-                  }}
-                  aria-label={`${feature.name} বিস্তারিত দেখুন`}
-                >
-                  {featured.map((product, index) => (
-                    <Image
-                      key={product.id}
-                      src={product.image}
-                      alt={index === featureIndex ? product.name : ""}
-                      fill
-                      priority
-                      sizes="(max-width: 900px) 90vw, 42vw"
-                      style={{ opacity: index === featureIndex ? 1 : 0, transition: "opacity 0.45s ease" }}
-                    />
-                  ))}
-                  <span className="stage-kicker">
-                    <span>{categories.find((item) => item.id === feature.category)?.label}</span>
-                    <span>
-                      {featureIndex + 1} / {featured.length}
-                    </span>
-                  </span>
-                  <span className="stage-meta">
-                    <span>
-                      <span>{feature.nameBn}</span>
-                      <strong lang="en">{feature.name}</strong>
-                    </span>
-                    <span>{feature.size || "প্যাক দেখুন"}</span>
-                  </span>
-                </button>
-                <div className="stage-picks" role="tablist" aria-label="হিরোর পণ্য">
-                  {featured.map((product, index) => (
-                    <button
-                      key={product.id}
-                      type="button"
-                      role="tab"
-                      aria-label={product.name}
-                      aria-selected={index === featureIndex}
-                      onClick={() => setFeatureIndex(index)}
-                    >
-                      <Image src={product.image} alt="" width={72} height={72} />
-                      <span lang="en">{product.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </section>
         <PackShelf reduced={reduced} onOpen={openProduct} />
