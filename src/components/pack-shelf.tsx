@@ -10,14 +10,11 @@ type PackShelfProps = {
 
 export default function PackShelf({ reduced, onOpen }: PackShelfProps) {
   return (
-    <section className="shelf" aria-roledescription="carousel" aria-label="কয়েকটা প্যাক">
+    <section className="shelf" aria-roledescription="carousel" aria-label="বেশি বিক্রি হওয়া প্যাক">
       <div className="container">
         <div className="shelf-head">
           <div className="section-copy">
-            <p className="eyebrow" lang="en">
-              PACKS
-            </p>
-            <h2>আগে এই প্যাকগুলো দেখুন।</h2>
+            <h2>যেগুলো বেশি বিক্রি হয়।</h2>
           </div>
         </div>
         <div className="shelf-window">
