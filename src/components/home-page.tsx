@@ -89,12 +89,14 @@ export default function HomePage() {
   const [filter, setFilter] = useState<CategoryId>("all");
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Product | null>(null);
+  const [expanded, setExpanded] = useState(false);
 
   const shown = products.filter((product) => {
     const categoryOk = filter === "all" || product.category === filter;
     const haystack = `${product.name} ${product.nameBn} ${product.aliases} ${product.maker}`.toLowerCase();
     return categoryOk && haystack.includes(search.toLowerCase().trim());
   });
+  const visible = expanded ? shown : shown.slice(0, 9);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -239,20 +241,31 @@ export default function HomePage() {
                 value={search}
                 placeholder="পণ্যের নাম লিখুন"
                 aria-label="পণ্য খুঁজুন"
-                onChange={(event) => setSearch(event.target.value)}
+                onChange={(event) => {
+                  setSearch(event.target.value);
+                  setExpanded(false);
+                }}
               />
             </label>
           </div>
           <div className="filters" role="toolbar" aria-label="পণ্যের বিভাগ">
             {categories.map((item) => (
-              <button key={item.id} type="button" aria-pressed={filter === item.id} onClick={() => setFilter(item.id)}>
+              <button
+                key={item.id}
+                type="button"
+                aria-pressed={filter === item.id}
+                onClick={() => {
+                  setFilter(item.id);
+                  setExpanded(false);
+                }}
+              >
                 {item.label}
               </button>
             ))}
           </div>
           <p className="product-count">{shown.length}টি পণ্য</p>
           <div className="product-grid" aria-live="polite">
-            {shown.map((product) => (
+            {visible.map((product) => (
               <article className="product" key={product.id}>
                 <button
                   className="pack-photo"
@@ -275,6 +288,13 @@ export default function HomePage() {
               </article>
             ))}
           </div>
+          {shown.length > 9 && !expanded && (
+            <div className="more">
+              <button className="button secondary" type="button" onClick={() => setExpanded(true)}>
+                আরও দেখুন
+              </button>
+            </div>
+          )}
           {shown.length === 0 && (
             <div className="empty">
               <p>এই নামে কোনো পণ্য নেই। বানান পালটে দেখুন, অথবা নামটি WhatsApp-এ পাঠান।</p>
@@ -284,6 +304,7 @@ export default function HomePage() {
                 onClick={() => {
                   setSearch("");
                   setFilter("all");
+                  setExpanded(false);
                 }}
               >
                 সব পণ্য দেখুন
