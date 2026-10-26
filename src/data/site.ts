@@ -7,6 +7,6 @@ export const email = "chashivai07@gmail.com";
 
 export function whatsappFor(name: string, size: string) {
   const pack = size || "প্যাকেট";
-  const text = `আসসালামু আলাইকুম। ${name} (${pack}) নিতে চাই। দাম, মজুত ও ডেলিভারি জানাবেন।`;
+  const text = `আসসালামু আলাইকুম, ${name} (${pack}) পণ্যটির দাম, মজুত ও ডেলিভারি সম্পর্কে জানতে চাই।`;
   return `${whatsapp}?text=${encodeURIComponent(text)}`;
 }

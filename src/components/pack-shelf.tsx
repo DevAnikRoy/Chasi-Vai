@@ -5,16 +5,17 @@ import { categories, shelf, type Product } from "@/data/catalog";
 
 type PackShelfProps = {
   reduced: boolean;
-  onOpen: (product: Product, image?: HTMLImageElement | null) => void;
+  onOpen: (product: Product) => void;
 };
 
 export default function PackShelf({ reduced, onOpen }: PackShelfProps) {
   return (
-    <section className="shelf" aria-roledescription="carousel" aria-label="বেশি বিক্রি হওয়া প্যাক">
+    <section className="shelf" aria-roledescription="carousel" aria-label="দোকানের কিছু পণ্য">
       <div className="container">
         <div className="shelf-head">
           <div className="section-copy">
-            <h2>যেগুলো বেশি বিক্রি হয়।</h2>
+            <h2>দোকানে যা পাবেন।</h2>
+            <p>পানির যত্ন, প্রোবায়োটিক, পুষ্টি, ভেট—প্যাক দেখে নাম মিলিয়ে নিন।</p>
           </div>
         </div>
         <div className="shelf-window">
@@ -27,7 +28,7 @@ export default function PackShelf({ reduced, onOpen }: PackShelfProps) {
                     type="button"
                     key={`${product.id}-${loop}`}
                     tabIndex={loop > 0 ? -1 : undefined}
-                    onClick={(event) => onOpen(product, event.currentTarget.querySelector("img"))}
+                    onClick={() => onOpen(product)}
                   >
                     <span className="shelf-photo">
                       <Image src={product.image} alt="" fill sizes="220px" />

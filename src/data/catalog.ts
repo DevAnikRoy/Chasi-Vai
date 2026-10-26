@@ -1,9 +1,9 @@
 export const categories = [
   { id: "all", label: "সব পণ্য" },
-  { id: "water", label: "পানির ওষুধ" },
+  { id: "water", label: "পানির যত্ন" },
   { id: "probiotic", label: "প্রোবায়োটিক" },
-  { id: "nutrition", label: "ভিটামিন" },
-  { id: "vet", label: "ভেটের ওষুধ" },
+  { id: "nutrition", label: "পুষ্টি ও শক্তি" },
+  { id: "vet", label: "ভেট" },
 ] as const;
 
 export type CategoryId = (typeof categories)[number]["id"];

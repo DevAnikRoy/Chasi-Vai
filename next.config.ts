@@ -6,6 +6,7 @@ const scriptSrc =
     : "script-src 'self' 'unsafe-inline'";
 
 const config: NextConfig = {
+  allowedDevOrigins: ["127.0.0.1"],
   poweredByHeader: false,
   turbopack: {
     root: process.cwd(),
