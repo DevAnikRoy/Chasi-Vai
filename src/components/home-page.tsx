@@ -340,14 +340,28 @@ export default function HomePage() {
           </p>
           </div>
         </section>
-        <section className="band container order">
-          <div className="reveal">
-            <h2>পণ্য নিতে তিন ধাপ।</h2>
-            <div className="steps">
+        <section className="band order" id="order">
+          <div className="container">
+            <div className="order-intro reveal">
+              <h2>পণ্য নিতে তিন ধাপ।</h2>
+            </div>
+            <div className="steps reveal">
               {[
-                { number: "১", title: "পণ্য বাছুন", copy: "তালিকা থেকে নাম দেখে আপনার দরকারি পণ্য বেছে নিন।" },
-                { number: "২", title: "দাম জানুন", copy: "WhatsApp-এ বর্তমান দাম, মজুত ও ডেলিভারি জেনে নিন।" },
-                { number: "৩", title: "অর্ডার দিন", copy: "কথা মিললে অর্ডার নিশ্চিত করুন—তারপর পাঠানোর ব্যবস্থা।" },
+                {
+                  number: "১",
+                  title: "পণ্য বাছুন",
+                  copy: "তালিকা থেকে নাম দেখে আপনার দরকারি পণ্য বেছে নিন।",
+                },
+                {
+                  number: "২",
+                  title: "দাম জানুন",
+                  copy: "WhatsApp-এ বর্তমান দাম, মজুত ও ডেলিভারি জেনে নিন।",
+                },
+                {
+                  number: "৩",
+                  title: "অর্ডার দিন",
+                  copy: "কথা মিললে অর্ডার নিশ্চিত করুন—তারপর পাঠানোর ব্যবস্থা।",
+                },
               ].map(({ number, title, copy }) => (
                 <article className="step" key={number}>
                   <span className="step-number">{number}</span>
