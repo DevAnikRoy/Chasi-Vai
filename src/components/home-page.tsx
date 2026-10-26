@@ -6,8 +6,8 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ArrowRight, ArrowUpRight, ChevronDown, ChevronUp, Mail, Menu, Phone, Search, X } from "lucide-react";
 import { categories, products, type CategoryId, type Product } from "@/data/catalog";
-import { trustShots } from "@/data/trust";
 import PackShelf from "@/components/pack-shelf";
+import TrustGallery from "@/components/trust-gallery";
 import { channel, email, facebook, phone, phoneLabel, whatsapp, whatsappFor } from "@/data/site";
 import { FacebookMark, WhatsAppMark, YouTubeMark } from "@/components/brand-marks";
 import ChannelPlayer from "@/components/channel-player";
@@ -216,35 +216,28 @@ export default function HomePage() {
             <div className="section-copy">
               <h2>চাষই পেশা, দোকানও নিজের।</h2>
               <p>
-                দুটো বড় পুকুরে নিজে মাছ চাষ করি। দোকানে মাছ ও গরুর খাবার, ওষুধ, আর চাষের দরকারি পণ্য রাখি। চাষিদের
-                প্রশিক্ষণ ও সেমিনারেও যুক্ত—RMTP, GAP, BAP, HACCP-সংক্রান্ত কাজের অভিজ্ঞতা আছে। নিচের ছবিগুলো
-                আমার নিজের পুকুর, দোকান ও আয়োজন থেকে।
+                দুটো বড় পুকুরে নিজে মাছ চাষ, দোকানে খাবার-ওষুধ-চাষের সরঞ্জাম। চাষিদের প্রশিক্ষণ ও RMTP-সহ GAP, BAP,
+                HACCP-সংক্রান্ত কাজে অংশ—নিচের ছবি সব নিজের পুকুর, দোকান ও আয়োজন থেকে।
               </p>
             </div>
-            <div className="trust-spread">
-              <figure className="trust-card is-lead">
-                <Image
-                  src={trustShots[0].src}
-                  alt={trustShots[0].alt}
-                  fill
-                  sizes="(max-width: 900px) 92vw, 50vw"
-                  style={{ objectPosition: trustShots[0].position }}
-                />
-              </figure>
-              <div className="trust-mosaic">
-                {trustShots.slice(1).map((shot) => (
-                  <figure className="trust-card" key={shot.src}>
-                    <Image
-                      src={shot.src}
-                      alt={shot.alt}
-                      fill
-                      sizes="(max-width: 640px) 92vw, 24vw"
-                      style={{ objectPosition: shot.position }}
-                    />
-                  </figure>
-                ))}
-              </div>
+            <TrustGallery />
+          </div>
+        </section>
+        <section className="band channel" id="videos">
+          <div className="container">
+            <div className="section-copy">
+              <h2>চাষের কাজে সাহায্য—ভিডিও।</h2>
+              <p>
+                মাছের যত্ন, Orulina ভিটামিন, সবুজ খাদ্য, খাওয়ানোর সাধারণ ভুল, Soil Care, চিংড়ি রোগ—YouTube-এ
+                যেতে হবে না, এখানেই দেখুন।
+              </p>
             </div>
+            <ChannelPlayer reduced={reduced} />
+            <a className="text-link channel-out" href={channel} target="_blank" rel="noopener noreferrer">
+              <YouTubeMark size={16} />
+              পুরো চ্যানেল
+              <ArrowUpRight className="icon" size={16} strokeWidth={1.75} aria-hidden />
+            </a>
           </div>
         </section>
         <PackShelf reduced={reduced} onOpen={openProduct} />
@@ -345,23 +338,6 @@ export default function HomePage() {
             দাম ও স্টক জানতে WhatsApp করুন। কতটুকু দেবেন, প্যাকেটের লেখা ও প্রস্তুতকারকের নির্দেশ মেনে নিন।{" "}
             <a href="#contact">যোগাযোগ</a>
           </p>
-          </div>
-        </section>
-        <section className="band channel" id="videos">
-          <div className="container">
-            <div className="section-copy">
-              <h2>চাষের কাজে সাহায্য—ভিডিও।</h2>
-              <p>
-                মাছের যত্ন, Orulina ভিটামিন, সবুজ খাদ্য, খাওয়ানোর সাধারণ ভুল, Soil Care, চিংড়ি রোগ—YouTube-এ
-                যেতে হবে না, এখানেই দেখুন।
-              </p>
-            </div>
-            <ChannelPlayer reduced={reduced} />
-            <a className="text-link channel-out" href={channel} target="_blank" rel="noopener noreferrer">
-              <YouTubeMark size={16} />
-              পুরো চ্যানেল
-              <ArrowUpRight className="icon" size={16} strokeWidth={1.75} aria-hidden />
-            </a>
           </div>
         </section>
         <section className="band container order">
