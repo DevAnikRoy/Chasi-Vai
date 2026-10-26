@@ -1,18 +1,22 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import gsap from "gsap";
-import { Flip } from "gsap/Flip";
 import { useGSAP } from "@gsap/react";
-import { ArrowRight, ArrowUpRight, BadgeCheck, Mail, Menu, MessageCircle, Package, Phone, Search, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, ChevronUp, Mail, Menu, Phone, Search, X } from "lucide-react";
 import { categories, products, type CategoryId, type Product } from "@/data/catalog";
+import { trustShots } from "@/data/trust";
 import PackShelf from "@/components/pack-shelf";
 import { channel, email, facebook, phone, phoneLabel, whatsapp, whatsappFor } from "@/data/site";
 import { FacebookMark, WhatsAppMark, YouTubeMark } from "@/components/brand-marks";
 import ChannelPlayer from "@/components/channel-player";
 
-gsap.registerPlugin(Flip, useGSAP);
+gsap.registerPlugin(useGSAP);
+
+function normalizeQuery(raw: string) {
+  return raw.trim().toLowerCase().replace(/\s+/g, " ");
+}
 
 function useReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -81,20 +85,26 @@ function MagnetLink({
 
 export default function HomePage() {
   const root = useRef<HTMLDivElement>(null);
-  const dialog = useRef<HTMLDialogElement>(null);
-  const flipFrom = useRef<HTMLImageElement | null>(null);
   const reduced = useReducedMotion();
   const [menu, setMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [filter, setFilter] = useState<CategoryId>("all");
   const [search, setSearch] = useState("");
+  const [expanded, setExpanded] = useState(false);
   const [selected, setSelected] = useState<Product | null>(null);
 
+  const query = normalizeQuery(search);
   const shown = products.filter((product) => {
     const categoryOk = filter === "all" || product.category === filter;
-    const haystack = `${product.name} ${product.nameBn} ${product.aliases} ${product.maker}`.toLowerCase();
-    return categoryOk && haystack.includes(search.toLowerCase().trim());
+    if (!query) return categoryOk;
+    const haystack = normalizeQuery(`${product.name} ${product.nameBn} ${product.aliases} ${product.maker} ${product.id}`);
+    return categoryOk && haystack.includes(query);
   });
+  const visible = query || expanded ? shown : shown.slice(0, 9);
+
+  useEffect(() => {
+    setExpanded(false);
+  }, [filter, search]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -103,28 +113,26 @@ export default function HomePage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useLayoutEffect(() => {
-    const node = dialog.current;
-    if (!selected || !node) return;
-    if (!node.open) node.showModal();
-    const target = node.querySelector("img");
-    const source = flipFrom.current;
-    if (target && source && !reduced) {
-      const state = Flip.getState(source);
-      Flip.from(state, {
-        targets: target,
-        duration: 0.65,
-        scale: true,
-        absolute: true,
-        ease: "power3.inOut",
-      });
-    }
-    flipFrom.current = null;
-  }, [selected, reduced]);
+  useEffect(() => {
+    if (!selected) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelected(null);
+    };
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [selected]);
 
-  function openProduct(product: Product, image?: HTMLImageElement | null) {
-    flipFrom.current = image ?? null;
+  function openProduct(product: Product) {
     setSelected(product);
+  }
+
+  function closeProduct() {
+    setSelected(null);
   }
 
   function closeMenu() {
@@ -136,23 +144,9 @@ export default function HomePage() {
       <a className="skip-link" href="#main">
         মূল অংশে যান
       </a>
-      <div className="intro" aria-hidden={reduced}>
-        <button
-          className="intro-skip"
-          type="button"
-          onClick={(event) => event.currentTarget.closest(".intro")?.classList.add("is-skipped")}
-        >
-          এড়িয়ে যান
-        </button>
-        <div className="intro-card">
-          <Image className="intro-crest" src="/images/brand/crest.webp" alt="" width={148} height={148} priority />
-          <span className="intro-line" />
-          <strong>চাষি ভাই</strong>
-        </div>
-      </div>
       <div className="topbar">
         <div className="container">
-          <span>মাছ, চিংড়ি ও পোল্ট্রি খামারের পণ্য</span>
+          <span>মাছ, গরু, পোল্ট্রি—খামারের দোকান</span>
           <a href={channel} target="_blank" rel="noopener noreferrer">
             <YouTubeMark size={15} />
             চাষি ভাই ইউটিউব
@@ -164,7 +158,7 @@ export default function HomePage() {
           <a className="brand" href="#main" aria-label="চাষি ভাই হোম">
             <Image src="/images/brand/crest.webp" alt="" width={52} height={52} />
             <span>
-              চাষি ভাই<small>মাছ, চিংড়ি ও পোল্ট্রির পণ্য</small>
+              চাষি ভাই<small>পুকুর · দোকান · ভিডিও</small>
             </span>
           </a>
           <button
@@ -179,8 +173,8 @@ export default function HomePage() {
           </button>
           <nav id="navigation" className={menu ? "navigation is-open" : "navigation"} aria-label="প্রধান মেনু" onClick={closeMenu}>
             <a href="#products">পণ্য</a>
+            <a href="#trust">আমার কাজ</a>
             <a href="#videos">ভিডিও</a>
-            <a href="#about">পরিচয়</a>
             <a className="nav-contact" href="#contact">
               যোগাযোগ
             </a>
@@ -189,55 +183,77 @@ export default function HomePage() {
       </header>
       <main id="main">
         <section className="hero">
-          <Image
-            className="hero-photo"
-            src="/images/hero-pond.jpg"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-          />
-          <div className="hero-shade" />
-          <div className="container hero-grid">
+          <div className="hero-visual">
+            <Image className="hero-photo" src="/images/trust/training.webp" alt="চাষিদের প্রশিক্ষণ অনুষ্ঠান" fill priority sizes="100vw" />
+          </div>
+          <div className="container hero-body">
             <div className="hero-copy">
-              <p className="eyebrow">মাছ · চিংড়ি · পোল্ট্রি</p>
               <h1>
                 <span className="line">
-                  <Words text="খামারের পণ্য," />
+                  <Words text="মাছ চাষ করি" />
                 </span>
                 <span className="line">
-                  <Words text="নাম ধরে" /> <em>খুঁজুন।</em>
+                  <Words text="নিজে, দোকানেও" /> <Words text="পাশে আছি।" />
                 </span>
               </h1>
               <p className="lede">
-                চাষি ভাই মাছ ও চিংড়ি চাষ এবং পোল্ট্রির প্রয়োজনীয় পণ্য রাখে। প্যাক দেখে নাম মিলিয়ে নিন। দাম ও মজুত জানতে WhatsApp বা ফোন করুন।
+                দুইটা বড় পুকুরে প্রতিদিন চাষ, আর দোকানে মাছ ও গরুর খাবার ও ওষুধ। দাম বা মজুত জানতে WhatsApp-এ লিখুন—সরাসরি
+                উত্তর পাবেন।
               </p>
-              <ul className="hero-points">
-                <li>{products.length}টি পণ্য: পানির যত্ন, প্রোবায়োটিক, পুষ্টি ও ভেট</li>
-                <li>চাষের ভিডিও এই সাইটেই চলে</li>
-                <li>অর্ডার হয় সরাসরি কথা বলে, এখানে দাম লেখা নেই</li>
-              </ul>
               <div className="actions">
-                <MagnetLink className="button primary" href="#products">
+                <a className="button primary" href="#products">
                   পণ্য দেখুন
-                  <ArrowRight className="icon" size={18} strokeWidth={1.75} aria-hidden />
-                </MagnetLink>
+                </a>
                 <a className="button secondary" href="#videos">
-                  <YouTubeMark size={16} />
-                  ভিডিও দেখুন
+                  চাষের ভিডিও
                 </a>
               </div>
             </div>
           </div>
         </section>
+        <section className="band trust" id="trust">
+          <div className="container">
+            <div className="section-copy">
+              <h2>চাষই পেশা, দোকানও নিজের।</h2>
+              <p>
+                দুটো বড় পুকুরে নিজে মাছ চাষ করি। দোকানে মাছ ও গরুর খাবার, ওষুধ, আর চাষের দরকারি পণ্য রাখি। চাষিদের
+                প্রশিক্ষণ ও সেমিনারেও যুক্ত—RMTP, GAP, BAP, HACCP-সংক্রান্ত কাজের অভিজ্ঞতা আছে। নিচের ছবিগুলো
+                আমার নিজের পুকুর, দোকান ও আয়োজন থেকে।
+              </p>
+            </div>
+            <div className="trust-spread">
+              <figure className="trust-card is-lead">
+                <Image
+                  src={trustShots[0].src}
+                  alt={trustShots[0].alt}
+                  fill
+                  sizes="(max-width: 900px) 92vw, 50vw"
+                  style={{ objectPosition: trustShots[0].position }}
+                />
+              </figure>
+              <div className="trust-mosaic">
+                {trustShots.slice(1).map((shot) => (
+                  <figure className="trust-card" key={shot.src}>
+                    <Image
+                      src={shot.src}
+                      alt={shot.alt}
+                      fill
+                      sizes="(max-width: 640px) 92vw, 24vw"
+                      style={{ objectPosition: shot.position }}
+                    />
+                  </figure>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
         <PackShelf reduced={reduced} onOpen={openProduct} />
-        <section className="band container" id="products">
+        <section className="band shop" id="products">
+          <div className="container">
           <div className="section-heading reveal">
             <div className="section-copy">
-              <p className="eyebrow" lang="en">
-                CATALOG
-              </p>
-              <h2>সব প্যাক একসাথে।</h2>
+              <h2>খামারে কী লাগবে, নাম দেখে খুঁজুন।</h2>
+              <p>পানির যত্ন, প্রোবায়োটিক, পুষ্টি ও শক্তি, ভেট—মোট ৩৩টি পণ্য। দাম ও মজুত এখানে দেখানো হয় না।</p>
             </div>
             <label className="search">
               <Search className="icon" size={18} strokeWidth={1.75} aria-hidden />
@@ -258,31 +274,58 @@ export default function HomePage() {
               </button>
             ))}
           </div>
-          <p className="product-count">{shown.length}টি পণ্য</p>
+          <p className="product-count">
+            {query || expanded || shown.length <= 9
+              ? `${shown.length}টি পণ্য`
+              : `${visible.length}টি দেখা যাচ্ছে, মোট ${shown.length}টি`}
+          </p>
           <div className="product-grid" aria-live="polite">
-            {shown.map((product) => (
+            {visible.map((product) => (
               <article className="product" key={product.id}>
-                <button
-                  className="pack-photo"
-                  type="button"
-                  onClick={(event) => openProduct(product, event.currentTarget.querySelector("img"))}
-                  aria-label={`${product.name} বিস্তারিত দেখুন`}
+                <div
+                  className="product-open"
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${product.name} বিস্তারিত`}
+                  onClick={() => openProduct(product)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      openProduct(product);
+                    }
+                  }}
                 >
-                  <Image src={product.image} alt={`${product.name} প্যাকেট`} fill sizes="(max-width: 640px) 90vw, 30vw" />
-                </button>
-                <div className="product-meta">
-                  <span>{categories.find((item) => item.id === product.category)?.label}</span>
-                  <span>{product.size || "প্যাক দেখুন"}</span>
+                  <span className="pack-photo">
+                    <Image src={product.image} alt={`${product.name} প্যাকেট`} fill sizes="(max-width: 640px) 90vw, 30vw" />
+                  </span>
+                  <span className="product-meta">
+                    <span>{categories.find((item) => item.id === product.category)?.label}</span>
+                    <span>{product.size || "প্যাকেট দেখুন"}</span>
+                  </span>
+                  <span className="product-name" lang="en">
+                    {product.name}
+                  </span>
+                  <span className="bn">{product.nameBn}</span>
+                  <span className="text-link">
+                    বিস্তারিত দেখুন
+                    <ArrowRight className="icon" size={16} strokeWidth={1.75} aria-hidden />
+                  </span>
                 </div>
-                <h3 lang="en">{product.name}</h3>
-                <p className="bn">{product.nameBn}</p>
-                <button className="text-link" type="button" onClick={() => openProduct(product)}>
-                  বিস্তারিত দেখুন
-                  <ArrowRight className="icon" size={16} strokeWidth={1.75} aria-hidden />
-                </button>
               </article>
             ))}
           </div>
+          {!query && shown.length > 9 && (
+            <div className="catalog-more">
+              <button className="button secondary" type="button" aria-expanded={expanded} onClick={() => setExpanded((open) => !open)}>
+                {expanded ? "কম দেখুন" : `আরও ${shown.length - 9}টি পণ্য`}
+                {expanded ? (
+                  <ChevronUp className="icon" size={18} strokeWidth={1.75} aria-hidden />
+                ) : (
+                  <ChevronDown className="icon" size={18} strokeWidth={1.75} aria-hidden />
+                )}
+              </button>
+            </div>
+          )}
           {shown.length === 0 && (
             <div className="empty">
               <p>এই নামে কোনো পণ্য পাওয়া যায়নি।</p>
@@ -299,21 +342,19 @@ export default function HomePage() {
             </div>
           )}
           <p className="footnote">
-            দাম, মজুত ও ডেলিভারি এই তালিকায় নেই। জানতে যোগাযোগ করুন। ব্যবহারের নিয়ম প্যাকেটের লেখা থেকে নিন।{" "}
-            <a href="#contact">
-              যোগাযোগ
-              <ArrowRight className="icon" size={14} strokeWidth={1.75} aria-hidden />
-            </a>
+            দাম ও স্টক জানতে WhatsApp করুন। কতটুকু দেবেন, প্যাকেটের লেখা ও প্রস্তুতকারকের নির্দেশ মেনে নিন।{" "}
+            <a href="#contact">যোগাযোগ</a>
           </p>
+          </div>
         </section>
         <section className="band channel" id="videos">
           <div className="container">
             <div className="section-copy">
-              <p className="eyebrow" lang="en">
-                WATCH
+              <h2>চাষের কাজে সাহায্য—ভিডিও।</h2>
+              <p>
+                মাছের যত্ন, Orulina ভিটামিন, সবুজ খাদ্য, খাওয়ানোর সাধারণ ভুল, Soil Care, চিংড়ি রোগ—YouTube-এ
+                যেতে হবে না, এখানেই দেখুন।
               </p>
-              <h2>চাষের ভিডিও এখানেই চলবে।</h2>
-              <p>মাছ ও চিংড়ি চাষ নিয়ে চাষি ভাইয়ের ভিডিও এই পাতাতেই চলে। তালিকা থেকে অন্য ভিডিও বেছে নিলে সেটাও এখানেই শুরু হয়।</p>
             </div>
             <ChannelPlayer reduced={reduced} />
             <a className="text-link channel-out" href={channel} target="_blank" rel="noopener noreferrer">
@@ -323,45 +364,17 @@ export default function HomePage() {
             </a>
           </div>
         </section>
-        <section className="band container about" id="about">
-          <div className="about-grid reveal">
-            <div className="about-brand">
-              <Image src="/images/brand/crest.webp" alt="চাষি ভাইয়ের লোগো" width={112} height={112} />
-              <div>
-                <p className="eyebrow" lang="en">
-                  ABOUT
-                </p>
-                <h2>চাষি ভাই কী করে।</h2>
-              </div>
-            </div>
-            <div>
-              <p>
-                মাছ ও চিংড়ি চাষ এবং পোল্ট্রির প্রয়োজনীয় পণ্য সরবরাহ করে, আর ইউটিউবে সেই চাষ নিয়ে ভিডিও বানায়। পণ্য নিতে চাইলে নাম বলে WhatsApp করুন।
-              </p>
-              <a className="text-link" href="#contact">
-                যোগাযোগ করুন
-                <ArrowRight className="icon" size={16} strokeWidth={1.75} aria-hidden />
-              </a>
-            </div>
-          </div>
-        </section>
         <section className="band container order">
           <div className="reveal">
-            <p className="eyebrow" lang="en">
-              PATH
-            </p>
-            <h2>পণ্য নিতে এই তিন ধাপ।</h2>
+            <h2>পণ্য নিতে তিন ধাপ।</h2>
             <div className="steps">
               {[
-                { number: "০১", title: "পণ্য বেছে নিন", copy: "প্যাকের নাম দেখে আপনার দরকারের পণ্যটি খুঁজুন।", icon: Package },
-                { number: "০২", title: "দাম জানুন", copy: "মজুত ও ডেলিভারি নিয়ে সরাসরি কথা বলুন। এখানে দাম লেখা নেই।", icon: MessageCircle },
-                { number: "০৩", title: "অর্ডার দিন", copy: "পেমেন্ট ও নেওয়ার নিয়ম বুঝে তারপর নিশ্চিত করুন।", icon: BadgeCheck },
-              ].map(({ number, title, copy, icon: StepIcon }) => (
+                { number: "১", title: "পণ্য বাছুন", copy: "তালিকা থেকে নাম দেখে আপনার দরকারি পণ্য বেছে নিন।" },
+                { number: "২", title: "দাম জানুন", copy: "WhatsApp-এ বর্তমান দাম, মজুত ও ডেলিভারি জেনে নিন।" },
+                { number: "৩", title: "অর্ডার দিন", copy: "কথা মিললে অর্ডার নিশ্চিত করুন—তারপর পাঠানোর ব্যবস্থা।" },
+              ].map(({ number, title, copy }) => (
                 <article className="step" key={number}>
-                  <span className="step-number">
-                    <StepIcon className="icon" size={16} strokeWidth={1.75} aria-hidden />
-                    {number}
-                  </span>
+                  <span className="step-number">{number}</span>
                   <h3>{title}</h3>
                   <p>{copy}</p>
                 </article>
@@ -369,14 +382,12 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        <section className="band container contact" id="contact">
+        <section className="band contact on-dark" id="contact">
+          <div className="container">
           <div className="contact-grid reveal">
             <div>
-              <p className="eyebrow" lang="en">
-                CONTACT
-              </p>
-              <h2>দাম ও মজুত জানতে কথা বলুন।</h2>
-              <p>পণ্যের নাম, কতটা লাগবে, আর কোথায় পাঠাতে হবে, সেটা লিখে WhatsApp করুন।</p>
+              <h2>যোগাযোগ—WhatsApp সবচেয়ে দ্রুত।</h2>
+              <p>কোন পণ্য, কতটা, কোথায় পাঠাতে হবে—তিনটা লিখে পাঠান। ফোন, ইমেইল বা Facebook-ও চলবে।</p>
             </div>
             <MagnetLink className="button primary" href={whatsapp} external>
               <WhatsAppMark />
@@ -418,6 +429,7 @@ export default function HomePage() {
               </span>
             </a>
           </div>
+          </div>
         </section>
       </main>
       <footer>
@@ -425,17 +437,18 @@ export default function HomePage() {
           <a className="brand" href="#main">
             <Image src="/images/brand/crest.webp" alt="" width={48} height={48} />
             <span>
-              চাষি ভাই<small>মাছ, চিংড়ি ও পোল্ট্রির পণ্য</small>
+              চাষি ভাই<small>পুকুর · দোকান · ভিডিও</small>
             </span>
           </a>
           <nav aria-label="ফুটার">
             <a href="#products">পণ্য</a>
+            <a href="#trust">আমার কাজ</a>
             <a href="#videos">ভিডিও</a>
             <a href="#contact">যোগাযোগ</a>
           </nav>
         </div>
         <div className="container footer-bottom">
-          <span>© {new Date().getFullYear()} চাষি ভাই</span>
+          <span suppressHydrationWarning>© {new Date().getFullYear()} চাষি ভাই</span>
           <span>ব্যবহারবিধির জন্য প্রস্তুতকারকের নির্দেশনা অনুসরণ করুন।</span>
         </div>
       </footer>
@@ -443,48 +456,43 @@ export default function HomePage() {
         <WhatsAppMark />
         WhatsApp
       </MagnetLink>
-      <dialog
-        ref={dialog}
-        className="product-dialog"
-        aria-labelledby="product-dialog-title"
-        onClose={() => setSelected(null)}
-        onClick={(event) => {
-          if (event.target === event.currentTarget) dialog.current?.close();
-        }}
-      >
-        {selected && (
-          <div className="dialog-content">
-            <button className="dialog-close" type="button" aria-label="বিস্তারিত বন্ধ করুন" onClick={() => dialog.current?.close()}>
-              <X className="icon" size={18} strokeWidth={1.75} aria-hidden />
-            </button>
-            <div className="dialog-photo">
-              <Image src={selected.image} alt={selected.name} fill sizes="(max-width: 900px) 90vw, 420px" />
-            </div>
-            <div className="dialog-copy">
-              <p className="eyebrow">{categories.find((item) => item.id === selected.category)?.label}</p>
-              <h2 id="product-dialog-title" lang="en">
-                {selected.name}
-              </h2>
-              <p>{selected.nameBn}</p>
-              <dl>
-                <div>
-                  <dt>প্যাক সাইজ</dt>
-                  <dd>{selected.size || "প্যাকেট দেখুন"}</dd>
-                </div>
-                <div>
-                  <dt>ব্র্যান্ড</dt>
-                  <dd>{selected.maker || "প্যাকেট দেখুন"}</dd>
-                </div>
-              </dl>
-              <p>দাম ও মজুত এই পাতায় নেই। জানতে যোগাযোগ করুন। কতটুকু দেবেন, সেটা প্যাকেটের নির্দেশনা থেকে নিন।</p>
-              <a className="button primary" href={whatsappFor(selected.name, selected.size)} target="_blank" rel="noopener noreferrer">
-                <WhatsAppMark />
-                এই পণ্য নিয়ে WhatsApp
-              </a>
+      {selected && (
+        <div className="product-modal" role="presentation">
+          <button className="product-modal-backdrop" type="button" aria-label="বিস্তারিত বন্ধ করুন" onClick={closeProduct} />
+          <div className="product-dialog" role="dialog" aria-modal="true" aria-labelledby="product-dialog-title">
+            <div className="dialog-content">
+              <button className="dialog-close" type="button" aria-label="বিস্তারিত বন্ধ করুন" onClick={closeProduct}>
+                <X className="icon" size={18} strokeWidth={1.75} aria-hidden />
+              </button>
+              <div className="dialog-photo">
+                <Image src={selected.image} alt={selected.name} fill sizes="(max-width: 900px) 90vw, 420px" />
+              </div>
+              <div className="dialog-copy">
+                <p className="eyebrow">{categories.find((item) => item.id === selected.category)?.label}</p>
+                <h2 id="product-dialog-title" lang="en">
+                  {selected.name}
+                </h2>
+                <p>{selected.nameBn}</p>
+                <dl>
+                  <div>
+                    <dt>সাইজ</dt>
+                    <dd>{selected.size || "প্যাকেট দেখুন"}</dd>
+                  </div>
+                  <div>
+                    <dt>ব্র্যান্ড</dt>
+                    <dd>{selected.maker || "প্যাকেট দেখুন"}</dd>
+                  </div>
+                </dl>
+                <p>দাম ও মজুত এখানে দেখানো হয় না। WhatsApp-এ জেনে নিন; পরিমাণ প্যাকেটের লেখা অনুযায়ী।</p>
+                <a className="button primary" href={whatsappFor(selected.name, selected.size)} target="_blank" rel="noopener noreferrer">
+                  <WhatsAppMark />
+                  এই পণ্য নিয়ে WhatsApp
+                </a>
+              </div>
             </div>
           </div>
-        )}
-      </dialog>
+        </div>
+      )}
     </div>
   );
 }
