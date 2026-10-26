@@ -510,6 +510,7 @@ footer {
 
 .shop {
   padding-top: 28px;
+  padding-bottom: clamp(56px, 7vw, 80px);
 }
 
 .section-heading,
@@ -1001,15 +1002,25 @@ footer {
   border: 1px solid var(--line);
 }
 
-.order {
-  padding-top: 0;
+.band.order {
+  padding-block: clamp(80px, 9vw, 104px);
+}
+
+.order-intro {
+  padding-top: 0.35em;
+}
+
+.order-intro h2 {
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .steps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
-  margin-top: 28px;
+  margin-top: clamp(36px, 5vw, 48px);
 }
 
 .step {
@@ -1431,6 +1442,10 @@ footer {
 
   .band {
     padding: 64px 0;
+  }
+
+  .band.order {
+    padding-block: clamp(68px, 16vw, 88px);
   }
 
   .brand small {
