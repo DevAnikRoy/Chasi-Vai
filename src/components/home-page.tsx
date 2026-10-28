@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ArrowRight, ArrowUpRight, ChevronDown, ChevronUp, Mail, Menu, Phone, Search, X } from "lucide-react";
 import { categories, products, type CategoryId, type Product } from "@/data/catalog";
+import HeroCarousel from "@/components/hero-carousel";
 import PackShelf from "@/components/pack-shelf";
 import TrustGallery from "@/components/trust-gallery";
 import { channel, email, facebook, phone, phoneLabel, whatsapp, whatsappFor } from "@/data/site";
@@ -183,10 +184,8 @@ export default function HomePage() {
       </header>
       <main id="main">
         <section className="hero">
-          <div className="hero-visual">
-            <Image className="hero-photo" src="/images/trust/training.webp" alt="চাষিদের প্রশিক্ষণ অনুষ্ঠান" fill priority sizes="100vw" />
-          </div>
-          <div className="container hero-body">
+          <HeroCarousel reduced={reduced} />
+          <div className="container hero-overlay">
             <div className="hero-copy">
               <h1>
                 <span className="line">
